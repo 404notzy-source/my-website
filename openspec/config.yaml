@@ -1,23 +1,71 @@
 schema: spec-driven
 
 context: |
-  项目：个人品牌站（Personal Website）
-  技术栈：React 19 + Vite 7 + TypeScript + Tailwind CSS v4
-  部署：GitHub Pages，base path 为 /my-website/
-  设计风格：科技感，动态粒子风，支持亮/暗切换
-  性能：首屏加载 < 2 秒，所有图片使用 lazy loading
+  项目：个人品牌站 → 个人潮牌店（渐进扩展中）
+
+  技术栈：
+    - 前端：React 19 + Vite 8 + TypeScript 6 + Tailwind CSS 4
+    - 后端（即将添加）：FastAPI + SQLite
+    - 构建工具：Vite（仅前端），后端独立进程
+
+  当前代码现状：
+    - 纯前端 SPA，无路由库，单页锚点导航（#hero / #projects / #contact）
+    - 7 个组件全部为函数式组件，App.tsx 平铺所有 section
+    - 数据层硬编码于 src/data/projects.ts（18 条静态产品数据），无 API 调用
+    - 单一 React Context（ThemeProvider：亮/暗切换）
+    - 仅 HeroParticles 使用 lazy loading，无其他代码分割
+
+  样式方案：
+    - Tailwind CSS 4，class 策略暗色模式（.dark 类切换）
+    - CSS @property 注册自定义属性实现渐变角度旋转动画（hero-gradient-rotate）
+    - 亮/暗色变量分 :root 和 .dark 定义（渐变三色 + 粒子颜色）
+    - Canvas 粒子动画（HeroParticles.tsx，60 粒子，requestAnimationFrame 驱动）
+    - 全局 smooth scroll，scroll-margin-top 锚点偏移
+    - 响应式：mobile-first，sm / lg 断点，grid-cols-1/2/3
+
+  路由：
+    - 当前零路由 —— 单页 App.tsx，依赖 <a href="#id"> 原生锚点跳转
+    - 无 React Router / TanStack Router / 文件路由
+    - URL 不变，所有内容在同一页面纵向滚动
+    - 扩展方向：需新增路由库以支持 /dashboard、/admin 等独立页面
+
+  部署：
+    - 前端：GitHub Pages（base: /my-website/），gh-pages 分支自动部署
+    - 后端：暂定与前端统一域名，具体方案待确认（GitHub Pages 仅支持静态文件）
+    - 构建产物：dist/ 目录，含 index.html + JS/CSS bundle + 静态资源
+
+  复用约束：
+    - ThemeProvider 可直接全局复用，不重写
+    - Navbar 需改造以同时支持锚点链接和路由链接
+    - ProjectCard 卡片模式可复用于 Dashboard 数据卡片
+    - 新增后端服务不得修改 vite.config.ts 前端构建配置
+    - 所有新组件沿用函数式组件 + Tailwind + 暗色模式规范
 
 rules:
-  proposal:
-    - 必须明确写出 out-of-scope（不做什么）
-    - 必须评估对现有功能的影响
   specs:
-    - 使用 Given/When/Then 格式描述交互行为
-    - 每个 spec 必须包含至少一个边界/异常场景
+    - "所有 API 行为使用 Given/When/Then 格式描述"
+    - "每个 spec 必须包含至少一个错误/异常场景"
+    - "每个 requirement 的 scenario 不超过 5 个"
+    - "单个 spec 文件不超过 2000 词"
+    - "省略理由说明，除非该理由直接影响实现决策"
+    - "使用 RFC 2119 关键词（SHALL / SHOULD / MAY）表述约束强度"
+
   tasks:
-    - 每个任务粒度不超过 30 分钟
-    - 按 Phase 分组，每个 Phase 结束后等待我确认
+    - "单个 task 不超过 2 小时工作量"
+    - "相关 task 按 phase 分组，phase 之间串行，phase 内 task 可并行"
+    - "每个 phase 结束后包含验证步骤（如何确认该 phase 正确完成）"
+    - "新建服务 / hook / 工具函数前，必须先检查是否有可复用的已有实现"
+
+  design:
+    - "必须包含组件层级图（ASCII 或 Mermaid）"
+    - "新增 API 端点必须文档化：method、path、request/response schema、错误码"
+    - "涉及数据模型变更时，需附 ER 图或表结构说明"
+
+  proposal:
+    - "必须显式列出 out-of-scope / NOT doing 清单"
+    - "高风险变更（数据库迁移、路由重构、部署方式变更）必须包含回滚方案"
+    - "必须评估对现有功能的影响范围（列出受影响文件/组件）"
 
 languages: |
   Generate all artifacts in Simplified Chinese.
-  Use English for code-related terms.
+  Use English for code-related terms (component names, API paths, type names, RFC 2119 keywords).

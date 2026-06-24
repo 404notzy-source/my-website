@@ -1,0 +1,192 @@
+import { useState, useEffect, type FormEvent } from 'react'
+import { Link, Navigate, useNavigate } from 'react-router-dom'
+import { useAuth } from '../contexts/AuthContext'
+import { getCaptcha } from '../services/auth'
+
+export default function RegisterPage() {
+  const { state, register } = useAuth()
+  const navigate = useNavigate()
+
+  const [username, setUsername] = useState('')
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
+  const [confirmPassword, setConfirmPassword] = useState('')
+  const [captchaAnswer, setCaptchaAnswer] = useState('')
+  const [captchaId, setCaptchaId] = useState('')
+  const [captchaImage, setCaptchaImage] = useState('')
+  const [error, setError] = useState('')
+  const [submitting, setSubmitting] = useState(false)
+
+  const refreshCaptcha = async () => {
+    try {
+      const data = await getCaptcha()
+      setCaptchaId(data.captcha_id)
+      setCaptchaImage(data.image)
+      setCaptchaAnswer('')
+    } catch {
+      setError('获取验证码失败')
+    }
+  }
+
+  useEffect(() => {
+    refreshCaptcha()
+  }, [])
+
+  if (state.isAuthenticated) {
+    return <Navigate to="/" replace />
+  }
+
+  const handleSubmit = async (e: FormEvent) => {
+    e.preventDefault()
+    setError('')
+
+    if (!username.trim() || !email.trim() || !password || !confirmPassword) {
+      setError('请填写所有字段')
+      return
+    }
+    if (password !== confirmPassword) {
+      setError('两次输入的密码不一致')
+      return
+    }
+    if (password.length < 8) {
+      setError('密码长度不能少于 8 位')
+      return
+    }
+    if (!captchaAnswer.trim()) {
+      setError('请输入验证码答案')
+      return
+    }
+
+    setSubmitting(true)
+    try {
+      await register(username.trim(), email.trim(), password, captchaId, captchaAnswer.trim())
+      navigate('/')
+    } catch (err: unknown) {
+      const detail = (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail
+      if (detail === 'Invalid or expired captcha') {
+        setError('验证码错误或已过期，请刷新后重试')
+        refreshCaptcha()
+      } else {
+        setError(detail || '注册失败，请稍后重试')
+      }
+    } finally {
+      setSubmitting(false)
+    }
+  }
+
+  return (
+    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 flex items-center justify-center px-4 pt-16 transition-colors duration-700">
+      <div className="w-full max-w-sm">
+        <h1 className="text-2xl font-bold text-center text-gray-900 dark:text-white">
+          注册
+        </h1>
+
+        <form onSubmit={handleSubmit} className="mt-8 space-y-4">
+          {error && (
+            <div className="px-4 py-2 rounded-lg bg-red-50 dark:bg-red-900/20 text-red-600 dark:text-red-400 text-sm text-center">
+              {error}
+            </div>
+          )}
+
+          <div>
+            <label htmlFor="username" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              用户名
+            </label>
+            <input
+              id="username"
+              type="text"
+              value={username}
+              onChange={e => setUsername(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
+              autoFocus
+              autoComplete="username"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              邮箱
+            </label>
+            <input
+              id="email"
+              type="email"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
+              autoComplete="email"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="password" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              密码
+            </label>
+            <input
+              id="password"
+              type="password"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
+              autoComplete="new-password"
+            />
+          </div>
+
+          <div>
+            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
+              确认密码
+            </label>
+            <input
+              id="confirmPassword"
+              type="password"
+              value={confirmPassword}
+              onChange={e => setConfirmPassword(e.target.value)}
+              className="w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
+              autoComplete="new-password"
+            />
+          </div>
+
+          {/* 验证码 */}
+          <div>
+            <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">验证码</label>
+            <div className="flex gap-2 items-start">
+              {captchaImage && (
+                <img
+                  src={captchaImage}
+                  alt="验证码"
+                  className="h-12 rounded border border-slate-200 dark:border-gray-600 cursor-pointer shrink-0"
+                  onClick={refreshCaptcha}
+                  title="点击刷新"
+                />
+              )}
+              <button type="button" onClick={refreshCaptcha}
+                className="shrink-0 p-2 text-blue-500 hover:text-blue-600 transition-colors" title="换一张">
+                <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
+                </svg>
+              </button>
+            </div>
+            <input id="captcha" type="text" value={captchaAnswer} onChange={e => setCaptchaAnswer(e.target.value)}
+              placeholder="输入图片中的字符"
+              className="mt-2 w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
+              autoComplete="off" />
+          </div>
+
+          <button
+            type="submit"
+            disabled={submitting}
+            className="w-full py-2.5 rounded-lg bg-blue-500 text-white font-medium hover:bg-blue-600 disabled:opacity-50 transition-colors"
+          >
+            {submitting ? '注册中...' : '注册'}
+          </button>
+        </form>
+
+        <p className="mt-6 text-center text-sm text-gray-500 dark:text-gray-400">
+          已有账号？
+          <Link to="/login" className="ml-1 text-blue-500 hover:text-blue-600 font-medium transition-colors">
+            登录
+          </Link>
+        </p>
+      </div>
+    </div>
+  )
+}

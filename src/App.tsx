@@ -1,51 +1,48 @@
-import { ThemeProvider, useTheme } from './components/ThemeProvider'
-import Navbar, { type NavItem } from './components/Navbar'
-import Hero from './components/Hero'
-import ProjectSection from './components/ProjectSection'
-import AboutSection from './components/AboutSection'
+import { HashRouter, Routes, Route } from 'react-router-dom'
+import { ThemeProvider } from './components/ThemeProvider'
+import Navbar from './components/Navbar'
+import LandingPage from './pages/LandingPage'
+import ShopPage from './pages/ShopPage'
+import ProductDetailPage from './pages/ProductDetailPage'
+import CartPage from './pages/CartPage'
+import LoginPage from './pages/LoginPage'
+import RegisterPage from './pages/RegisterPage'
+import ProfilePage from './pages/ProfilePage'
+import HistoryPage from './pages/HistoryPage'
+import NotFoundPage from './pages/NotFoundPage'
+import ProtectedRoute from './components/ProtectedRoute'
+import { AuthProvider } from './contexts/AuthContext'
+import { CartProvider } from './contexts/CartContext'
 
-const NAV_ITEMS: NavItem[] = [
-  { label: '首页', href: '#hero' },
-  { label: '项目', href: '#projects' },
-  { label: '联系我', href: '#contact' },
+const NAV_ITEMS = [
+  { label: '首页', href: '/' },
+  { label: '商品', href: '/shop' },
+  { label: '购物车', href: '/cart' },
+  { label: '关于我', href: '#about' },
 ]
 
 function App() {
   return (
     <ThemeProvider>
-      <AppContent />
+      <HashRouter>
+        <AuthProvider>
+          <CartProvider>
+            <Navbar brandName="大超潮牌店" items={NAV_ITEMS} />
+            <Routes>
+              <Route path="/" element={<LandingPage />} />
+              <Route path="/shop" element={<ShopPage />} />
+              <Route path="/product/:id" element={<ProductDetailPage />} />
+              <Route path="/cart" element={<CartPage />} />
+              <Route path="/login" element={<LoginPage />} />
+              <Route path="/register" element={<RegisterPage />} />
+              <Route path="/profile" element={<ProtectedRoute><ProfilePage /></ProtectedRoute>} />
+              <Route path="/history" element={<ProtectedRoute><HistoryPage /></ProtectedRoute>} />
+              <Route path="*" element={<NotFoundPage />} />
+            </Routes>
+          </CartProvider>
+        </AuthProvider>
+      </HashRouter>
     </ThemeProvider>
-  )
-}
-
-function AppContent() {
-  const { theme, toggleTheme } = useTheme()
-
-  return (
-    <div className="min-h-screen bg-slate-50 dark:bg-gray-950 transition-colors duration-700">
-      {/* 临时主题切换按钮——后续由独立 toggle 组件替代 */}
-      <button
-        onClick={toggleTheme}
-        className="fixed top-4 right-4 z-50 px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-slate-50 dark:bg-gray-800 text-gray-900 dark:text-gray-100 text-sm font-medium shadow-sm hover:shadow-md transition-all duration-500"
-        aria-label={theme === 'light' ? '切换到暗色模式' : '切换到亮色模式'}
-      >
-        {theme === 'light' ? '🌙' : '☀️'}
-      </button>
-
-      <Navbar brandName="大超潮牌店" items={NAV_ITEMS} />
-
-      <Hero
-        name="大超潮牌店"
-        title="老子实干家"
-        tagline="不随波逐流，只做时间洪流里的风格雕刻者。"
-        ctaText="查看我的项目"
-        ctaHref="#projects"
-      />
-
-      <ProjectSection />
-
-      <AboutSection />
-    </div>
   )
 }
 
