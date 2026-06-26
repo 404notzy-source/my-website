@@ -16,6 +16,7 @@ export default function ProductDetailPage() {
   const [error, setError] = useState<string | null>(null)
   const [quantity, setQuantity] = useState(1)
   const [addedToCart, setAddedToCart] = useState(false)
+  const [activeImage, setActiveImage] = useState(0)
 
   useEffect(() => {
     if (!id) return
@@ -99,13 +100,34 @@ export default function ProductDetailPage() {
           </Link>
         </div>
 
-        {/* 商品大图 */}
-        <div className="aspect-video rounded-xl overflow-hidden bg-slate-100 dark:bg-gray-800">
-          <img
-            src={product.imageUrl}
-            alt={product.name}
-            className="h-full w-full object-cover"
-          />
+        {/* 商品图片画廊 */}
+        <div className="space-y-3">
+          {/* 主图 */}
+          <div className="aspect-video rounded-xl overflow-hidden bg-slate-100 dark:bg-gray-800">
+            <img
+              src={product.images?.[activeImage] || product.imageUrl}
+              alt={product.name}
+              className="h-full w-full object-cover"
+            />
+          </div>
+          {/* 缩略图 */}
+          {(product.images && product.images.length > 1) && (
+            <div className="flex gap-2 overflow-x-auto pb-1">
+              {product.images.map((src, i) => (
+                <button
+                  key={i}
+                  onClick={() => setActiveImage(i)}
+                  className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                    i === activeImage
+                      ? 'border-blue-500 ring-1 ring-blue-500/30'
+                      : 'border-transparent opacity-60 hover:opacity-100'
+                  }`}
+                >
+                  <img src={src} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
+                </button>
+              ))}
+            </div>
+          )}
         </div>
 
         <div className="mt-8">
