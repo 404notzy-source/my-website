@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { Link, NavLink } from 'react-router-dom'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
+import AuthModal from './AuthModal'
 
 export interface NavItem {
   label: string
@@ -19,6 +20,7 @@ export default function Navbar({ brandName, items }: NavbarProps) {
   const [badgePop, setBadgePop] = useState(false)
   const [userMenuOpen, setUserMenuOpen] = useState(false)
   const [aboutOpen, setAboutOpen] = useState(false)
+  const [authModalOpen, setAuthModalOpen] = useState(false)
 
   useEffect(() => {
     if (lastAddedTime > 0) {
@@ -138,30 +140,21 @@ export default function Navbar({ brandName, items }: NavbarProps) {
                 )}
               </li>
             ) : (
-              <>
-                <li>
-                  <NavLink to="/login"
-                    className={({ isActive }) =>
-                      `text-sm sm:text-base font-medium transition-colors duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
-                        isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'
-                      }`
-                    }
-                  >登录</NavLink>
-                </li>
-                <li>
-                  <NavLink to="/register"
-                    className={({ isActive }) =>
-                      `text-sm sm:text-base font-medium transition-colors duration-300 hover:text-blue-600 dark:hover:text-blue-400 ${
-                        isActive ? 'text-blue-600 dark:text-blue-400' : 'text-gray-600 dark:text-gray-300'
-                      }`
-                    }
-                  >注册</NavLink>
-                </li>
-              </>
+              <li>
+                <button
+                  onClick={() => setAuthModalOpen(true)}
+                  className="text-sm sm:text-base font-medium text-gray-600 dark:text-gray-300 hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                >
+                  登录
+                </button>
+              </li>
             )}
           </ul>
         </div>
       </nav>
+
+      {/* Auth 弹窗 */}
+      <AuthModal open={authModalOpen} onClose={() => setAuthModalOpen(false)} />
 
       {/* 关于我弹窗 */}
       {aboutOpen && (
