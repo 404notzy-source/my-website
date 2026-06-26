@@ -91,27 +91,27 @@ export default function LoginPage() {
           {/* 验证码 */}
           <div>
             <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">验证码</label>
-            <div className="flex gap-2 items-start">
+            <div className="flex gap-2 items-stretch">
               {captchaImage && (
                 <img
                   src={captchaImage}
                   alt="验证码"
-                  className="h-12 rounded border border-slate-200 dark:border-gray-600 cursor-pointer shrink-0"
+                  className="h-10 rounded border border-slate-200 dark:border-gray-600 cursor-pointer shrink-0"
                   onClick={refreshCaptcha}
                   title="点击刷新"
                 />
               )}
+              <input id="captcha" type="text" value={captchaAnswer} onChange={e => setCaptchaAnswer(e.target.value)}
+                placeholder="请输入验证码"
+                className="flex-1 px-3 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors text-sm"
+                autoComplete="off" />
               <button type="button" onClick={refreshCaptcha}
-                className="shrink-0 p-2 text-blue-500 hover:text-blue-600 transition-colors" title="换一张">
+                className="shrink-0 px-2 text-blue-500 hover:text-blue-600 transition-colors" title="换一张">
                 <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
                   <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0l3.181 3.183a8.25 8.25 0 0013.803-3.7M4.031 9.865a8.25 8.25 0 0113.803-3.7l3.181 3.182" />
                 </svg>
               </button>
             </div>
-            <input id="captcha" type="text" value={captchaAnswer} onChange={e => setCaptchaAnswer(e.target.value)}
-              placeholder="输入图片中的字符"
-              className="mt-2 w-full px-4 py-2 rounded-lg border border-slate-200 dark:border-gray-600 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-colors"
-              autoComplete="off" />
           </div>
 
           <button type="submit" disabled={submitting}
