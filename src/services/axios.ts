@@ -2,7 +2,7 @@ import axios from 'axios'
 
 // 开发环境走 Vite proxy，生产环境使用 Railway 后端地址
 // TODO: 替换为你的 Railway 域名
-const PRODUCTION_API = 'https://zhipu.wang'
+const PRODUCTION_API = 'https://zhipu.wang:8443'
 
 const API_BASE = import.meta.env.DEV ? '' : PRODUCTION_API
 
