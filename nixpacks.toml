@@ -1,0 +1,8 @@
+# Railway 优先 Python 构建
+providers = ["python"]
+
+[phases.setup]
+aptPkgs = ["build-essential"]
+
+[start]
+cmd = "cd server && uvicorn main:app --host 0.0.0.0 --port ${PORT:-8000}"
