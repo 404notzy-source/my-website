@@ -186,18 +186,25 @@ export default function Navbar({ brandName, items }: NavbarProps) {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-sm text-gray-500 dark:text-gray-400 w-14">电话</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">13302020278</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">15805979119</span>
               </div>
             </div>
 
-            {/* 二维码占位 */}
-            <div className="mt-4 flex justify-center">
-              <div className="w-36 h-36 rounded-lg border-2 border-dashed border-slate-200 dark:border-gray-600 flex flex-col items-center justify-center text-gray-300 dark:text-gray-600">
-                <svg className="h-8 w-8 mb-1" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.75 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 013.75 9.375v-4.5zM3.75 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5zM13.5 4.875c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5A1.125 1.125 0 0113.5 9.375v-4.5zM13.5 14.625c0-.621.504-1.125 1.125-1.125h4.5c.621 0 1.125.504 1.125 1.125v4.5c0 .621-.504 1.125-1.125 1.125h-4.5a1.125 1.125 0 01-1.125-1.125v-4.5z" />
-                </svg>
-                <span className="text-xs">二维码</span>
-              </div>
+            {/* WhatsApp 二维码 */}
+            <div className="mt-4 flex flex-col items-center gap-2">
+              <a
+                href="https://wa.me/8615805979119"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="block rounded-lg overflow-hidden border border-slate-200 dark:border-gray-600 hover:ring-2 hover:ring-green-400 transition-all"
+              >
+                <img
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/8615805979119"
+                  alt="WhatsApp 二维码"
+                  className="w-40 h-40"
+                />
+              </a>
+              <span className="text-xs text-gray-400 dark:text-gray-500">扫码或点击联系 WhatsApp</span>
             </div>
           </div>
         </div>

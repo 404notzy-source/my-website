@@ -1,8 +1,10 @@
 # user-profile Specification
 
 ## Purpose
-TBD - created by archiving change user-auth. Update Purpose after archive.
+用户个人信息管理，含头像文件上传和会员等级计算。
+
 ## Requirements
+
 ### Requirement: 获取当前用户信息
 系统 SHALL 提供 `GET /api/users/me` 端点，返回当前认证用户的信息（需 Authorization header）。
 
@@ -21,13 +23,23 @@ TBD - created by archiving change user-auth. Update Purpose after archive.
 - **WHEN** 客户端发送 `GET /api/users/me`，携带过期 token
 - **THEN** 系统返回 401，body 为 `{"detail": "Token expired"}`
 
-### Requirement: 更新用户头像
-系统 SHALL 提供 `PATCH /api/users/me` 端点，允许更新 avatar_url 字段。
+### Requirement: 头像文件上传
+系统 SHALL 提供 `POST /api/users/me/avatar` 端点（multipart/form-data），接受图片文件上传，保存至服务器并返回更新后的用户信息。
 
-#### Scenario: 更新头像成功
+#### Scenario: 上传头像成功
 - **GIVEN** 用户已登录
-- **WHEN** 客户端发送 `PATCH /api/users/me`，body 为 `{"avatar_url": "https://example.com/avatar.jpg"}`
-- **THEN** 系统更新 avatar_url，返回 200 和完整的用户信息
+- **WHEN** 客户端发送 `POST /api/users/me/avatar`，form-data 含 `file` 字段（JPEG/PNG/GIF/WEBP，≤2MB）
+- **THEN** 系统保存文件到 `data/avatars/`，更新 avatar_url 为 `/static/avatars/<uuid>.<ext>`，返回 200 和完整用户信息
+
+#### Scenario: 文件类型不允许
+- **GIVEN** 用户已登录
+- **WHEN** 客户端上传非图片文件（如 PDF）
+- **THEN** 系统返回 400，body 为 `{"detail": "Only JPEG/PNG/GIF/WEBP allowed"}`
+
+#### Scenario: 文件过大
+- **GIVEN** 用户已登录
+- **WHEN** 客户端上传超过 2MB 的文件
+- **THEN** 系统返回 400，body 为 `{"detail": "File too large (max 2MB)"}`
 
 ### Requirement: 用户等级计算
 系统 SHALL 基于用户浏览足迹数量计算等级：浏览 0-19 为 1 级（青铜），20-49 为 2 级（白银），50-99 为 3 级（黄金），≥100 为 4 级（钻石）。
@@ -41,4 +53,3 @@ TBD - created by archiving change user-auth. Update Purpose after archive.
 - **GIVEN** 用户浏览足迹达到 20 件
 - **WHEN** `GET /api/users/me` 被调用
 - **THEN** level 字段为 2
-
