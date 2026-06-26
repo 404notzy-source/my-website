@@ -24,7 +24,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(1)}
         disabled={currentPage <= 1}
-        className="h-8 px-2 rounded text-xs text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
+        className="h-9 px-2 rounded text-sm text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
       >
         &laquo;
       </button>
@@ -32,19 +32,19 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(currentPage - 1)}
         disabled={currentPage <= 1}
-        className="h-8 px-2 rounded text-xs text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
+        className="h-9 px-2 rounded text-sm text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
       >
         &lsaquo;
       </button>
 
       {pages.map((page, i) =>
         page === '...' ? (
-          <span key={`dots-${i}`} className="w-6 text-center text-gray-300 text-xs">…</span>
+          <span key={`dots-${i}`} className="w-6 text-center text-gray-300 text-sm">…</span>
         ) : (
           <button
             key={page}
             onClick={() => onPageChange(page)}
-            className={`min-w-[1.75rem] h-8 px-1.5 rounded text-xs font-medium transition-colors ${
+            className={`min-w-[2rem] h-9 px-2 rounded text-sm font-medium transition-colors ${
               page === currentPage
                 ? 'bg-blue-500 text-white'
                 : 'text-gray-500 hover:text-blue-500 hover:bg-blue-50 dark:hover:bg-blue-500/10'
@@ -59,7 +59,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(currentPage + 1)}
         disabled={currentPage >= totalPages}
-        className="h-8 px-2 rounded text-xs text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
+        className="h-9 px-2 rounded text-sm text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
       >
         &rsaquo;
       </button>
@@ -67,7 +67,7 @@ export default function Pagination({ currentPage, totalPages, onPageChange }: Pa
       <button
         onClick={() => onPageChange(totalPages)}
         disabled={currentPage >= totalPages}
-        className="h-8 px-2 rounded text-xs text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
+        className="h-9 px-2 rounded text-sm text-gray-500 disabled:opacity-20 disabled:cursor-not-allowed hover:text-blue-500 transition-colors"
       >
         &raquo;
       </button>
