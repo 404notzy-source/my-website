@@ -26,7 +26,7 @@ export default function LandingPage() {
         title="潮流单品 · 品质之选"
         tagline="不随波逐流，只做时间洪流里的风格雕刻者。"
         ctaText="进入商城"
-        ctaHref="/#/shop"
+        ctaHref="#/shop"
       />
 
       {/* 精选商品预览 */}
