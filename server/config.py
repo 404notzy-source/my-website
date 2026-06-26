@@ -14,4 +14,10 @@ DATABASE_URL = os.getenv("DATABASE_URL", f"sqlite:///{os.path.join(DATA_DIR, 'ap
 CORS_ORIGINS = [
     "http://localhost:5173",
     "http://localhost:4173",
+    "https://404notzy-source.github.io",
 ]
+
+# Railway 部署时通过环境变量追加额外 origin
+_extra_origin = os.getenv("CORS_EXTRA_ORIGIN")
+if _extra_origin:
+    CORS_ORIGINS.append(_extra_origin)

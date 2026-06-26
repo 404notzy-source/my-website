@@ -1,6 +1,10 @@
 import axios from 'axios'
 
-const API_BASE = import.meta.env.DEV ? '' : ''
+// 开发环境走 Vite proxy，生产环境使用 Railway 后端地址
+// TODO: 替换为你的 Railway 域名
+const PRODUCTION_API = 'https://YOUR-APP.up.railway.app'
+
+const API_BASE = import.meta.env.DEV ? '' : PRODUCTION_API
 
 const apiClient = axios.create({
   baseURL: API_BASE,
@@ -36,7 +40,7 @@ apiClient.interceptors.response.use(
         const refreshToken = localStorage.getItem('refresh_token')
         if (!refreshToken) throw new Error('No refresh token')
 
-        const res = await axios.post('/api/auth/refresh', {
+        const res = await axios.post(`${API_BASE}/api/auth/refresh`, {
           refresh_token: refreshToken,
         })
 
