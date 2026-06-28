@@ -124,7 +124,7 @@ export default function ProductDetailPage() {
 
           {/* 主图区域 */}
           <div className="flex-1">
-            <div className="relative rounded-2xl overflow-hidden flex items-center justify-center" className="bg-slate-50 dark:bg-gray-800/50" style={{ maxHeight: '32rem' }}>
+            <div className="relative rounded-2xl overflow-hidden flex items-center justify-center bg-slate-50 dark:bg-gray-800/50" style={{ maxHeight: '32rem' }}>
               <img
                 src={proxyImageUrl(product.images?.[activeImage] || product.imageUrl)}
                 alt={product.name}
