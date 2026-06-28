@@ -4,6 +4,7 @@ import { getProductById } from '../services/api'
 import { useCart } from '../contexts/CartContext'
 import { useAuth } from '../contexts/AuthContext'
 import { recordView } from '../services/auth'
+import { proxyImageUrl } from '../services/imageProxy'
 import type { Product } from '../data/types'
 
 export default function ProductDetailPage() {
@@ -105,7 +106,7 @@ export default function ProductDetailPage() {
           {/* 主图 */}
           <div className="aspect-video rounded-xl overflow-hidden bg-slate-100 dark:bg-gray-800">
             <img
-              src={product.images?.[activeImage] || product.imageUrl}
+              src={proxyImageUrl(product.images?.[activeImage] || product.imageUrl)}
               alt={product.name}
               className="h-full w-full object-cover"
             />
@@ -123,7 +124,7 @@ export default function ProductDetailPage() {
                       : 'border-transparent opacity-60 hover:opacity-100'
                   }`}
                 >
-                  <img src={src} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
+                  <img src={proxyImageUrl(src)} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>

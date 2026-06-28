@@ -6,7 +6,7 @@ from fastapi.staticfiles import StaticFiles
 from .config import CORS_ORIGINS
 from .database import engine, Base
 from .models import User, BrowseHistory
-from .routers import auth, users, products
+from .routers import auth, users, products, proxy
 
 Base.metadata.create_all(bind=engine)
 
@@ -27,6 +27,7 @@ app.mount("/static/avatars", StaticFiles(directory=avatars_dir), name="avatars")
 app.include_router(auth.router)
 app.include_router(users.router)
 app.include_router(products.router)
+app.include_router(proxy.router)
 
 
 @app.get("/api/health")

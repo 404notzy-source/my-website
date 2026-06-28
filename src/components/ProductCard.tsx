@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import type { Product } from '../data/types'
+import { proxyImageUrl } from '../services/imageProxy'
 
 const PLACEHOLDER =
   'data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 width=%22600%22 height=%22400%22%3E%3Crect fill=%22%23e2e8f0%22 width=%22600%22 height=%22400%22/%3E%3Ctext x=%22300%22 y=%22210%22 text-anchor=%22middle%22 fill=%22%2394a3b8%22 font-size=%2224%22%3E暂无图片%3C/text%3E%3C/svg%3E'
@@ -17,7 +18,7 @@ export default function ProductCard({ product }: { product: Product }) {
       {/* 商品图片 */}
       <Link to={`/product/${product.id}`} className="block relative aspect-video overflow-hidden bg-slate-100 dark:bg-gray-800">
         <img
-          src={imgError ? PLACEHOLDER : product.imageUrl}
+          src={imgError ? PLACEHOLDER : proxyImageUrl(product.imageUrl)}
           alt={product.name}
           loading="lazy"
           onError={() => setImgError(true)}
