@@ -105,7 +105,7 @@ export default function ProductDetailPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* 左侧：竖向缩略图列表 (桌面端) / 底部横排 (手机端) */}
           {(product.images && product.images.length > 1) && (
-            <div className="hidden lg:flex flex-col gap-2 w-20 shrink-0 max-h-[28rem] overflow-y-auto pr-1 scrollbar-hide">
+            <div className="hidden lg:flex flex-col gap-2 w-20 shrink-0 overflow-y-auto scrollbar-hide" style={{ maxHeight: '32rem' }}>
               {product.images.map((src, i) => (
                 <button
                   key={i}
@@ -124,11 +124,12 @@ export default function ProductDetailPage() {
 
           {/* 主图区域 */}
           <div className="flex-1">
-            <div className="relative rounded-2xl overflow-hidden bg-slate-100 dark:bg-gray-800 flex items-center justify-center" style={{ minHeight: '24rem' }}>
+            <div className="relative rounded-2xl overflow-hidden flex items-center justify-center" className="bg-slate-50 dark:bg-gray-800/50" style={{ maxHeight: '32rem' }}>
               <img
                 src={proxyImageUrl(product.images?.[activeImage] || product.imageUrl)}
                 alt={product.name}
-                className="w-full h-auto max-h-[32rem] object-contain"
+                className="w-full h-auto object-contain"
+                style={{ maxHeight: '32rem' }}
               />
               {/* 左右箭头 */}
               {(product.images && product.images.length > 1) && (
