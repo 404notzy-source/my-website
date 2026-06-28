@@ -105,12 +105,12 @@ export default function ProductDetailPage() {
         <div className="flex flex-col lg:flex-row gap-4">
           {/* 左侧：竖向缩略图列表 (桌面端) / 底部横排 (手机端) */}
           {(product.images && product.images.length > 1) && (
-            <div className="hidden lg:flex flex-col gap-2 w-20 shrink-0 max-h-[28rem] overflow-y-auto pr-1">
+            <div className="hidden lg:flex flex-col gap-2 w-20 shrink-0 max-h-[28rem] overflow-y-auto pr-1 scrollbar-hide">
               {product.images.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                  className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 flex-shrink-0 ${
                     i === activeImage
                       ? 'border-blue-500 shadow-md'
                       : 'border-slate-200 dark:border-gray-700 opacity-70 hover:opacity-100 hover:border-slate-400'

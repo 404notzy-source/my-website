@@ -73,3 +73,12 @@ html {
               --hero-gradient-to 0.8s ease,
               --hero-gradient-via 0.8s ease;
 }
+
+/* ===== 隐藏滚动条但保持可滚动 ===== */
+.scrollbar-hide {
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
