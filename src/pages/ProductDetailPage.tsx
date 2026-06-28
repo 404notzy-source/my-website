@@ -101,34 +101,79 @@ export default function ProductDetailPage() {
           </Link>
         </div>
 
-        {/* 商品图片画廊 */}
-        <div className="space-y-3">
-          {/* 主图 */}
-          <div className="aspect-video rounded-xl overflow-hidden bg-slate-100 dark:bg-gray-800">
-            <img
-              src={proxyImageUrl(product.images?.[activeImage] || product.imageUrl)}
-              alt={product.name}
-              className="h-full w-full object-cover"
-            />
-          </div>
-          {/* 缩略图 */}
+        {/* 商品图片画廊 - 新风格 */}
+        <div className="flex flex-col lg:flex-row gap-4">
+          {/* 左侧：竖向缩略图列表 (桌面端) / 底部横排 (手机端) */}
           {(product.images && product.images.length > 1) && (
-            <div className="flex gap-2 overflow-x-auto pb-1">
+            <div className="hidden lg:flex flex-col gap-2 w-20 shrink-0 max-h-[28rem] overflow-y-auto pr-1">
               {product.images.map((src, i) => (
                 <button
                   key={i}
                   onClick={() => setActiveImage(i)}
-                  className={`shrink-0 w-16 h-12 rounded-lg overflow-hidden border-2 transition-all ${
+                  className={`shrink-0 w-20 h-20 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
                     i === activeImage
-                      ? 'border-blue-500 ring-1 ring-blue-500/30'
-                      : 'border-transparent opacity-60 hover:opacity-100'
+                      ? 'border-blue-500 shadow-md'
+                      : 'border-slate-200 dark:border-gray-700 opacity-70 hover:opacity-100 hover:border-slate-400'
                   }`}
                 >
-                  <img src={proxyImageUrl(src)} alt={`${product.name} ${i + 1}`} className="w-full h-full object-cover" />
+                  <img src={proxyImageUrl(src)} alt="" className="w-full h-full object-cover" />
                 </button>
               ))}
             </div>
           )}
+
+          {/* 主图区域 */}
+          <div className="flex-1">
+            <div className="relative rounded-2xl overflow-hidden bg-slate-100 dark:bg-gray-800 flex items-center justify-center" style={{ minHeight: '24rem' }}>
+              <img
+                src={proxyImageUrl(product.images?.[activeImage] || product.imageUrl)}
+                alt={product.name}
+                className="w-full h-auto max-h-[32rem] object-contain"
+              />
+              {/* 左右箭头 */}
+              {(product.images && product.images.length > 1) && (
+                <>
+                  <button
+                    onClick={() => setActiveImage(i => i > 0 ? i - 1 : product.images!.length - 1)}
+                    className="absolute left-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 dark:bg-gray-900/80 shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-900 transition-all"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M15 19l-7-7 7-7" /></svg>
+                  </button>
+                  <button
+                    onClick={() => setActiveImage(i => i < product.images!.length - 1 ? i + 1 : 0)}
+                    className="absolute right-3 top-1/2 -translate-y-1/2 w-10 h-10 rounded-full bg-white/80 dark:bg-gray-900/80 shadow-lg flex items-center justify-center text-gray-700 dark:text-gray-200 hover:bg-white dark:hover:bg-gray-900 transition-all"
+                  >
+                    <svg className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}><path strokeLinecap="round" strokeLinejoin="round" d="M9 5l7 7-7 7" /></svg>
+                  </button>
+                </>
+              )}
+              {/* 图片计数 */}
+              {(product.images && product.images.length > 1) && (
+                <span className="absolute bottom-3 right-3 px-2.5 py-1 rounded-full bg-black/50 text-white text-xs backdrop-blur-sm">
+                  {activeImage + 1} / {product.images.length}
+                </span>
+              )}
+            </div>
+
+            {/* 移动端：底部横排缩略图 */}
+            {(product.images && product.images.length > 1) && (
+              <div className="flex lg:hidden gap-2 mt-3 overflow-x-auto pb-1">
+                {product.images.map((src, i) => (
+                  <button
+                    key={i}
+                    onClick={() => setActiveImage(i)}
+                    className={`shrink-0 w-14 h-14 rounded-lg overflow-hidden border-2 transition-all duration-200 ${
+                      i === activeImage
+                        ? 'border-blue-500 shadow-md'
+                        : 'border-slate-200 dark:border-gray-700 opacity-70'
+                    }`}
+                  >
+                    <img src={proxyImageUrl(src)} alt="" className="w-full h-full object-cover" />
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
         </div>
 
         <div className="mt-8">
