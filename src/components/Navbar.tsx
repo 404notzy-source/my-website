@@ -179,20 +179,20 @@ export default function Navbar({ brandName, items }: NavbarProps) {
               </div>
               <div className="flex items-center gap-3">
                 <span className="text-sm text-gray-500 dark:text-gray-400 w-14">电话</span>
-                <span className="text-sm font-medium text-gray-900 dark:text-white">15805979119</span>
+                <span className="text-sm font-medium text-gray-900 dark:text-white">18030032410</span>
               </div>
             </div>
 
             {/* WhatsApp 二维码 */}
             <div className="mt-4 flex flex-col items-center gap-2">
               <a
-                href="https://wa.me/8615805979119"
+                href="https://wa.me/8618030032410"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="block rounded-lg overflow-hidden border border-slate-200 dark:border-gray-600 hover:ring-2 hover:ring-green-400 transition-all"
               >
                 <img
-                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/8615805979119"
+                  src="https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=https://wa.me/8618030032410"
                   alt="WhatsApp 二维码"
                   className="w-40 h-40"
                 />
