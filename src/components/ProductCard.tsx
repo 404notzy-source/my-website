@@ -9,10 +9,6 @@ const PLACEHOLDER =
 export default function ProductCard({ product }: { product: Product }) {
   const [imgError, setImgError] = useState(false)
 
-  const discountPercent = product.originalPrice
-    ? Math.round(((product.originalPrice - product.price) / product.originalPrice) * 100)
-    : 0
-
   return (
     <article className="group rounded-xl border border-slate-200 dark:border-gray-700 bg-white dark:bg-gray-900 overflow-hidden transition-all duration-300 hover:scale-[1.03] hover:shadow-lg hover:shadow-slate-200/50 dark:hover:shadow-gray-950/50">
       {/* 商品图片 */}
@@ -50,23 +46,6 @@ export default function ProductCard({ product }: { product: Product }) {
         <p className="mt-2 text-sm text-gray-600 dark:text-gray-400 line-clamp-2 transition-colors duration-300">
           {product.shortDescription}
         </p>
-
-        {/* 价格 */}
-        <div className="mt-4 flex items-baseline gap-2">
-          <span className="text-lg font-bold text-red-500 dark:text-red-400">
-            ¥{product.price.toLocaleString()}
-          </span>
-          {product.originalPrice && product.originalPrice > product.price && (
-            <span className="text-sm text-gray-400 line-through">
-              ¥{product.originalPrice.toLocaleString()}
-            </span>
-          )}
-          {discountPercent > 0 && (
-            <span className="text-xs font-medium text-red-500 bg-red-50 dark:bg-red-900/20 px-1.5 py-0.5 rounded">
-              -{discountPercent}%
-            </span>
-          )}
-        </div>
       </div>
     </article>
   )
